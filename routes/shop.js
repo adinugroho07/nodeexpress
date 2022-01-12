@@ -1,6 +1,9 @@
 const express = require('express');
 const path = require('path');
 
+//untuk mengambil data yang di kirimkan oleh page product
+const adminRoutes = require('./admin');
+
 const rootDir = require('../util/path');
 
 /*
@@ -56,7 +59,14 @@ router.get('/', (request, response, next) => {
     //response.sendFile(path.join(__dirname, '../', 'views', 'shop.html'));
 
     //root directory nya kita ambil dari file path.
-    response.sendFile(path.join(rootDir, 'views', 'shop.html'));
+    //response.sendFile(path.join(rootDir, 'views', 'shop.html'));
+
+    const products = adminRoutes.products;
+    response.render('shop', { prods: products, docTitle: 'Shop', path: '/' });
+    /*
+    response.render('nama file template engine', { data dalam format array });
+    format nya akan sama seperti di atas ini untuk merender template engine.
+    */
 });
 
 module.exports = router;
