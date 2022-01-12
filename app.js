@@ -1,7 +1,11 @@
 //const http = require('http');
 
+const path = require('path');
 const express = require('express');
-const res = require('express/lib/response');
+
+//untuk mengimport routes
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
 
 //untuk mengimport module body parser
 const bodyParser = require('body-parser');
@@ -15,45 +19,29 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 
 /*
+code di bawah ini berfungsi untuk membuka atau mempublish link yang static kepada public folder supaya bisa di akses file css
+nya. jadi di sini kita open supaya di file html nya bisa langsung di akses via path css/main.css atau css/product.css .
+jika ini di print express.static(path.join(__dirname, 'public')) -> D:\adi\workspacenodejs\nodeexpress\public
+*/
+app.use(express.static(path.join(__dirname, 'public')));
+
+/*
 jika ada penambahan middleware baru untuk penambahan route, maka harus di tambahkan di paling atas karena urutan proses
 eksekusi middleware ini di mulai dari atas dan setiap url pasti akan selalu di mulai dari / , oleh karena itu / di letakkan
 di urutan paling bawah, baru url yang /kontak di letakan di urutan atas nya.
 */
-//ini adalah contoh penggunaan middleware oleh expressjs
-app.use('/kontak', (request, respone, next) => {
-    respone.send('<h2>this is kontak page</h2>');
-});
 
-app.use('/kontak2', (request, respone, next) => {
-    respone.send('<h2>this is Kontak 2 page</h2>');
-});
+//jika di tambakan url lagi seperti di bawah maka setiap url yang ada pada object adminRoutes akan ketambahan prefix url yang
+//di define pada method di bawah. cth => url : /add-product akan menjadi /admin/add-product karena ketambahan prefix /admin .
+app.use('/admin', adminRoutes);
+//ini adalah contoh penggunaan route yang di import dari file lain / outsource.
+app.use(shopRoutes);
 
-app.use('/add-product', (request, respone, next) => {
-    respone.send(`
-        <form action="/product" method="post">
-            <label for="barangid">Nama Barang</label>
-            <input type="text" name="barang" id="barangid" />
-            <button type="submit">Add Product</button>
-        </form>
-    `);
-});
-
-app.use('/product', (request, respone, next) => {
-    /*
-    console log ini akan menghasilkan undefined, karena secara default request akan memberikan kita body request property
-    namun secara default request tidak akan mengubah/menterjemahkan/ parse dari incoming request body. oleh karena itu kita 
-    harus menginstal 3rd package untuk parse incoming request body tersebut. cara nya ketik npm install --save body-parser.
-    */
-    console.log(request.body);
-    respone.redirect('/')
-});
-
-app.use('/', (request, respone, next) => {
-    //next();//ini adalah untuk melanjut kan ke middleware selanjut nya.
-    respone.send('<h2>this is index page</h2>');
-});
-
-
+//ini untuk cath jika ada url yang ga ada tapi tetep di akses.
+//menggunakan use karena supaya tidak strict dengan url yang ada.
+app.use('/', (request, response, next) => {
+    response.status(404).sendFile(path.join(__dirname, 'views', 'page-not-found.html'));
+})
 
 //const server = http.createServer(app);
 //server.listen(3000)
