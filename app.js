@@ -22,7 +22,8 @@ app.set('view engine', 'nama template engine'); --> app.set('view engine', 'pug'
 dan untuk menset template engine ini ngeloop up views di folder mana ada di script di bawah ini.
 app.set('views','nama folder untuk di lookup'); --> app.set('views','views');
 */
-app.set('view engine', 'pug');
+//app.set('view engine', 'pug'); //template engine untuk pugjs
+app.set('view engine', 'ejs'); //template js untuk EJS
 app.set('views', 'views');
 
 app.use(bodyParser.urlencoded({ extended: false }));

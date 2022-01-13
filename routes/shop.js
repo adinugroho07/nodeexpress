@@ -62,7 +62,7 @@ router.get('/', (request, response, next) => {
     //response.sendFile(path.join(rootDir, 'views', 'shop.html'));
 
     const products = adminRoutes.products;
-    response.render('shop', { prods: products, docTitle: 'Shop', path: '/' });
+    response.render('shop', { prods: products, docTitle: 'Shop', pageTitle: 'Shop', path: '/' });
     /*
     response.render('nama file template engine', { data dalam format array });
     format nya akan sama seperti di atas ini untuk merender template engine.

@@ -23,7 +23,7 @@ router.get('/add-product', (request, response, next) => {
     // `);
     //response.sendFile(path.join(__dirname, '../', 'views', 'add-product.html'));
     //response.sendFile(path.join(rootDir, 'views', 'add-product.html'));
-    response.render('add-product', { docTitle: 'Add Product', path: '/admin/add-product' });
+    response.render('add-product', { pageTitle: 'Add Product', docTitle: 'Add Product', path: '/admin/add-product' });
 });
 
 /*
@@ -48,7 +48,8 @@ router.post('/product', (request, response, next) => {
         title: request.body.title,
         price: request.body.harga,
         description: request.body.deskripsi,
-        docTitle: 'Shop'
+        docTitle: 'Shop',
+        pageTitle: 'Shop',
     });
     console.log(products);
     response.redirect('/')
