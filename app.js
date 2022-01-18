@@ -13,6 +13,7 @@ const bodyParser = require('body-parser');
 //karena express di import as function.
 const app = express();
 
+const NotFoundController = require('./Controllers/Error');
 /*
 di bawah ini adalah config untuk menset template engine yang di gunakan yang mana dan folder mana yang akan di loopup untuk 
 views nya. untuk template engine yang populer ada 3, yaitu pug , ejs dan handlebars .
@@ -43,19 +44,13 @@ di urutan paling bawah, baru url yang /kontak di letakan di urutan atas nya.
 
 //jika di tambakan url lagi seperti di bawah maka setiap url yang ada pada object adminRoutes akan ketambahan prefix url yang
 //di define pada method di bawah. cth => url : /add-product akan menjadi /admin/add-product karena ketambahan prefix /admin .
-app.use('/admin', adminRoutes.routes);
+app.use('/admin', adminRoutes);
 //ini adalah contoh penggunaan route yang di import dari file lain / outsource.
 app.use(shopRoutes);
 
 //ini untuk cath jika ada url yang ga ada tapi tetep di akses.
 //menggunakan use karena supaya tidak strict dengan url yang ada.
-app.use('/', (request, response, next) => {
-    //response.status(404).sendFile(path.join(__dirname, 'views', 'page-not-found.html'));
-    response.status(404).render('page-not-found',
-        {
-            docTitle: 'Page Not Found'
-        });
-})
+app.use('/', NotFoundController.pageNotFound)
 
 //const server = http.createServer(app);
 //server.listen(3000)
